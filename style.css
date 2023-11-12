@@ -3,3 +3,9 @@ article {
     padding: 10px;
     margin: 10px;
 }
+#myForm{
+    *{
+        display: block;
+        margin: 10px;
+    }
+}

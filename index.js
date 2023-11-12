@@ -4,7 +4,7 @@ async function getEvents() {
     try{
         const response = await fetch(eventAPI+"/events");
         const data = await response.json();
-        for (let index = data.data.length -10; index < data.data.length; index++) {
+        for (let index =  0 ; index < data.data.length; index++) {
             events.push(data.data[index]);
         }
         events.forEach(element => {
@@ -19,7 +19,6 @@ async function getEvents() {
 getEvents();
 render();
 function render(){
-    createEventsElements();
 }
 function createEventsElements(event){
     // Create a new <article> element
@@ -42,5 +41,62 @@ function createEventsElements(event){
     const pDescription = document.createElement("p");
     pDescription.textContent = `Description :  ${event.description}`;
     articleElement.appendChild(pDescription);
+    const button = document.createElement("button");
+    button.textContent = "Delete";
+    button.addEventListener("click",async function(){
+        try{
+            const response = await fetch(eventAPI+"/events/"+event.id, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const responseData = await response.json();
+            console.log('Server response:', responseData);
+        } catch (error) {
+            console.error('Error:', error.message);
+        }
+        document.getElementById(event.id).remove();
+    });
+    articleElement.appendChild(button);
     document.body.appendChild(articleElement);
 }
+// get form data
+document.getElementById('myForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevents the default form submission
+
+    // Get form data
+    var formData = {};
+    var formElements = this.elements;
+    formData.name = formElements.fname.value;
+    formData.date = new Date(formElements.fdate.value).toISOString();
+    formData.location = formElements.flocation.value;
+    formData.description = formElements.fdescription.value;
+    // Send data to the server using fetch
+    try {
+        const response = await fetch(eventAPI+"/events", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+        console.log('Server response:', responseData);
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+
+    // Log form data to the console
+    console.log(formData);
+});

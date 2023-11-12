@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <article>
-        <h2>Event Name: Sample Event</h2>
-        <p>Date: November 15, 2023</p>
-        <p>Location: 123 Main Street, City, Country</p>
-        <p>Description: This is a sample event description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </article>
+    <form id="myForm" name="myForm" onsubmit="return validateForm()" method="post">
+        Event Name: <input type="text" name="fname">
+        Date: <input type="date" name="fdate">
+        Location: <input type="text" name="flocation">
+        Description: <input type="text" name="fdescription">
+        <input type="submit" value="Submit">
+    </form> 
     <script src="./index.js"></script>
 </body>
 </html>
